@@ -43,6 +43,9 @@ proc image_resizer*(imagePath: string, maxSize: int = 2000, tmpDir: string): str
   discard existsOrCreateDir(tmpDir)
   result = $dos_image_resizer(imagePath.cstring, maxSize.cint, tmpDir)
 
+proc image_getFileSize*(url: string): string =
+  result = $(dos_get_image_file_size(url.cstring))
+
 proc plain_text*(htmlString: string): string =
   result = $(dos_plain_text(htmlString.cstring))
 
