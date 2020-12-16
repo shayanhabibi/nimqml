@@ -114,6 +114,9 @@ type
   QNetworkAccessManagerFactory* = ref object of RootObj ## \
     vptr: DosQQNetworkAccessManagerFactory
 
+  QNetworkAccessManager* = ref object of RootObj ## \
+    vptr: DosQQNetworkAccessManager
+
   QUrlParsingMode*{.pure, size: sizeof(cint).} = enum
     Tolerant = 0.cint
     Strict = 1.cint

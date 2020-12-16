@@ -26,3 +26,18 @@ proc newQNetworkAccessManagerFactory*(tmpPath: string): QNetworkAccessManagerFac
   new(result, delete)
   result.setup(tmpPath)
 
+proc setup*(self: QNetworkAccessManager, vptr: pointer) =
+  self.vptr = vptr
+
+proc delete*(self: QNetworkAccessManager) =
+  if self.vptr.isNil:
+    return
+  self.vptr.resetToNil
+
+proc newQNetworkAccessManager*(vptr: DosQQNetworkAccessManager): QNetworkAccessManager =
+  new(result, delete)
+  result.setup(vptr)
+
+proc clearConnectionCache*(self: QNetworkAccessManager) =
+  dos_qqmlnetworkaccessmanager_clearconnectioncache(self.vptr)
+
