@@ -6,3 +6,5 @@ nimcache
 *.qmlc
 *.idea
 *main
+bin
+*.cfg
