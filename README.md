@@ -12,6 +12,8 @@ QML binding for the Nim programming language
 
 ### Building DOtherSide - Windows 64bit - MinGW
 
+First, ensure that the Qt version binaries are included in path.
+
 ```
 cd /cloned/Dotherside
 mkdir build
@@ -59,7 +61,12 @@ Thread model: posix
 
 Nim toolchain or whatever other toolchain you are using might be windows thread model.
 
-Qt toolchain in my case had posix thread model included so I just use their gcc for this purpose.
+Qt toolchain in my case had posix thread model included so I just use their gcc for 
+this purpose.
+
+> Update: Seems like its best to just use the QT gcc from the get go.
+
+
 
 ## Examples
 The examples can be built by executing the following command
