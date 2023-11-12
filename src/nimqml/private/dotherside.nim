@@ -1,7 +1,7 @@
 const dynLibName =
   case system.hostOS:
     of "windows":
-      "DOtherSide.dll"
+      "libDOtherSide.dll" # Currently cmake creates the dotherside with a lib prefix
     of "macosx":
       "libDOtherSide.dylib"
     else:
