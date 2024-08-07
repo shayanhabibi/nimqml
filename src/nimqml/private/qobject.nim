@@ -134,8 +134,7 @@ proc qobjectCallback(qobjectPtr: pointer, slotNamePtr: DosQVariant, dosArguments
 proc setup*(self: QObject) =
   ## Initialize a new QObject
   self.owner = true
-  let c = qobjectCallback
-  self.vptr = dos_qobject_create(addr(self[]), self.metaObject.vptr, c)
+  self.vptr = dos_qobject_create(addr(self[]), self.metaObject.vptr, qobjectCallback)
 
 proc deleteLater*(self: QObject) =
   debugMsg("QObject", "deleteLater")

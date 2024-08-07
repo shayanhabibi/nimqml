@@ -153,9 +153,8 @@ proc setup*(self: QAbstractItemModel) =
   canFetchMore: canFetchMoreCallback,
   fetchMore: fetchMoreCallback)
 
-  let c = qobjectCallback
   self.vptr = dos_qabstractitemmodel_create(addr(self[]), self.metaObject.vptr,
-                                            c, qaimCallbacks).DosQObject
+                                            qobjectCallback, qaimCallbacks).DosQObject
 
 proc hasIndex*(self: QAbstractItemModel, row: int, column: int, parent: QModelIndex): bool =
   debugMsg("QAbstractItemModel", "hasIndex")
