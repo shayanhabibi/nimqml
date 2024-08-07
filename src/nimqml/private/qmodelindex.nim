@@ -6,14 +6,6 @@ proc setup(self: QModelIndex, other: DosQModelIndex, takeOwnership: Ownership) =
   ## Setup a new QModelIndex
   self.vptr = if takeOwnership == Ownership.Take: other else: dos_qmodelindex_create_qmodelindex(other)
 
-proc delete*(self: QModelIndex) =
-  ## Delete the given QModelIndex
-  if not self.vptr.isNil:
-    return
-  debugMsg("QModelIndex", "delete")
-  dos_qmodelindex_delete(self.vptr)
-  self.vptr.resetToNil
-
 proc row*(self: QModelIndex): int =
   ## Return the index row
   dos_qmodelindex_row(self.vptr).int

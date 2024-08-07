@@ -41,9 +41,8 @@ proc dataCallback(modelPtr: pointer, rawIndex: DosQModelIndex, role: cint, resul
   let model = cast[QAbstractItemModel](modelPtr)
   let index = newQModelIndex(rawIndex, Ownership.Clone)
   let variant = data(model, index, role.int)
-  if variant != nil:
+  if variant != nil.QVariant:
     dos_qvariant_assign(result, variant.vptr)
-    variant.delete
 
 method setData*(self: QAbstractItemModel, index: QModelIndex, value: QVariant, role: int): bool {.base.} =
   ## Sets the data at the given index and role. Return true on success, false otherwise
@@ -87,7 +86,6 @@ proc headerDataCallback(modelPtr: pointer, section: cint, orientation: cint, rol
   let variant = model.headerData(section.int, orientation.QtOrientation, role.int)
   if variant != nil:
     dos_qvariant_assign(result, variant.vptr)
-    variant.delete
 
 proc createIndex*(self: QAbstractItemModel, row: int, column: int, data: pointer): QModelIndex =
   ## Create a new QModelIndex
@@ -155,13 +153,9 @@ proc setup*(self: QAbstractItemModel) =
   canFetchMore: canFetchMoreCallback,
   fetchMore: fetchMoreCallback)
 
+  let c = qobjectCallback
   self.vptr = dos_qabstractitemmodel_create(addr(self[]), self.metaObject.vptr,
-                                            qobjectCallback, qaimCallbacks).DosQObject
-
-proc delete*(self: QAbstractItemModel) =
-  ## Delete the given QAbstractItemModel
-  debugMsg("QAbstractItemModel", "delete")
-  self.QObject.delete()
+                                            c, qaimCallbacks).DosQObject
 
 proc hasIndex*(self: QAbstractItemModel, row: int, column: int, parent: QModelIndex): bool =
   debugMsg("QAbstractItemModel", "hasIndex")

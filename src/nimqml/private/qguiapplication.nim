@@ -3,14 +3,6 @@ proc setup*(self: QGuiApplication) =
   dos_qguiapplication_create()
   self.deleted = false
 
-proc delete*(self: QGuiApplication) =
-  ## Delete the given QApplication
-  if self.deleted:
-    return
-  debugMsg("QApplication", "delete")
-  dos_qguiapplication_delete()
-  self.deleted = true
-
 proc exec*(self: QGuiApplication) =
   ## Start the Qt event loop
   dos_qguiapplication_exec()

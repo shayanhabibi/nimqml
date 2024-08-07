@@ -1,10 +1,3 @@
-proc delete*(metaObject: QMetaObject) =
-  ## Delete a QMetaObject
-  debugMsg("QMetaObject", "delete")
-  if metaObject.vptr.isNil:
-    return
-  dos_qmetaobject_delete(metaObject.vptr)
-  metaObject.vptr.resetToNil
 
 proc setup(superClass: QMetaObject,
            className: string,

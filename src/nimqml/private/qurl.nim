@@ -2,14 +2,6 @@ proc setup*(self: QUrl, url: string, mode: QUrlParsingMode) =
   ## Setup a new QUrl
   self.vptr = dos_qurl_create(url.cstring, mode.cint)
 
-proc delete*(self: QUrl) =
-  ## Delete a QUrl
-  if self.vptr.isNil:
-    return
-  debugMsg("QUrl", "delete")
-  dos_qurl_delete(self.vptr)
-  self.vptr.resetToNil
-
 proc toString*(self: QUrl): string =
   ## Return the url string
   let str: cstring = dos_qurl_to_string(self.vptr)

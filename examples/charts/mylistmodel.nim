@@ -12,10 +12,9 @@ QtObject:
       maxX: int
       maxY: int
 
-  proc delete(self: MyListModel)
   proc setup(self: MyListModel)
   proc newMyListModel*(): MyListModel =
-    new(result, delete)
+    new(result)
     result.setup
 
   method rowCount(self: MyListModel, index: QModelIndex = nil): int =
@@ -66,9 +65,6 @@ QtObject:
       self.maxYChanged(y)
     self.points.add(Point(x: x, y: y))
     self.endInsertRows()
-
-  proc delete(self: MyListModel) =
-    self.QAbstractTableModel.delete
 
   proc setup(self: MyListModel) =
     self.QAbstractTableModel.setup

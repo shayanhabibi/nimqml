@@ -5,16 +5,12 @@ QtObject:
     name: string
     surname: string
 
-  proc delete*(self: Contact)
   proc setup(self: Contact)
 
   proc newContact*(): Contact =
-    new(result, delete)
+    new(result)
     result.name = ""
     result.setup
-
-  proc delete*(self: Contact) =
-    self.QObject.delete
 
   proc setup(self: Contact) =
     self.QObject.setup

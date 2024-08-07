@@ -29,13 +29,9 @@ proc setup*(self: QAbstractListModel) =
   canFetchMore: canFetchMoreCallback,
   fetchMore: fetchMoreCallback)
 
+  let c = qobjectCallback
   self.vptr = dos_qabstractlistmodel_create(addr(self[]), self.metaObject.vptr,
-                                            qobjectCallback, qaimCallbacks).DosQObject
-
-proc delete*(self: QAbstractListModel) =
-  ## Delete the given QAbstractItemModel
-  debugMsg("QAbstractItemModel", "delete")
-  self.QObject.delete()
+                                            c, qaimCallbacks).DosQObject
 
 method columnCount(self: QAbstractListModel, index: QModelIndex): int =
   return dos_qabstractlistmodel_columnCount(self.vptr.DosQAbstractListModel, index.vptr)

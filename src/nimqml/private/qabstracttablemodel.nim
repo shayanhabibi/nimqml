@@ -29,13 +29,9 @@ proc setup*(self: QAbstractTableModel) =
   canFetchMore: canFetchMoreCallback,
   fetchMore: fetchMoreCallback)
 
+  let c = qobjectCallback
   self.vptr = dos_qabstracttablemodel_create(addr(self[]), self.metaObject.vptr,
-                                            qobjectCallback, qaimCallbacks).DosQObject
-
-proc delete*(self: QAbstractTableModel) =
-  ## Delete the given QAbstractItemModel
-  debugMsg("QAbstractItemModel", "delete")
-  self.QObject.delete()
+                                            c, qaimCallbacks).DosQObject
 
 method parent(self: QAbstractTableModel, child: QModelIndex): QModelIndex =
   let indexPtr = dos_qabstracttablemodel_parent(self.vptr.DosQAbstractTableModel, child.vptr)

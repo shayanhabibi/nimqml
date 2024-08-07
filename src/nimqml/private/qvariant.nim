@@ -36,14 +36,6 @@ proc setup*(variant: QVariant, value: QVariant) =
   ## The inner value of the QVariant is copied
   setup(variant, value.vptr, Ownership.Clone)
 
-proc delete*(variant: QVariant) =
-  ## Delete a QVariant
-  if variant.vptr.isNil:
-    return
-  debugMsg("QVariant", "delete")
-  dos_qvariant_delete(variant.vptr)
-  variant.vptr.resetToNil
-
 proc isNull*(variant: QVariant): bool =
   ## Return true if the QVariant value is null, false otherwise
   dos_qvariant_isnull(variant.vptr)
@@ -104,11 +96,6 @@ proc toQVariantSequence(a: ptr DosQVariantArray, length: cint, takeOwnership: Ow
   result = @[]
   for i in 0..<length:
     result.add(newQVariant(a[i], takeOwnership))
-
-proc delete(a: openarray[QVariant]) =
-  ## Delete an array of QVariants
-  for x in a:
-    x.delete
 
 proc value*(self: QVariant, T: type string): string= self.stringVal
 proc value*(self: QVariant, T: type int): int = self.intVal

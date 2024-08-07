@@ -22,11 +22,3 @@ proc setRootContextProperty*(self: QQmlApplicationEngine, name: string, value: Q
   ## Set a root context property
   let context = dos_qqmlapplicationengine_context(self.vptr)
   dos_qqmlcontext_setcontextproperty(context, name.cstring, value.vptr)
-
-proc delete*(self: QQmlApplicationEngine) =
-  ## Delete the given QQmlApplicationEngine
-  debugMsg("QQmlApplicationEngine", "delete")
-  if self.vptr.isNil:
-    return
-  dos_qqmlapplicationengine_delete(self.vptr)
-  self.vptr.resetToNil

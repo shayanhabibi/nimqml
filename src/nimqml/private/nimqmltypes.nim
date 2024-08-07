@@ -1,47 +1,60 @@
 type
-  QObject* = ref object of RootObj ## \
+  QObject* = ref QObjectObj
+  QObjectObj* = object of RootObj ## \
     ## A QObject
     vptr: DosQObject
     owner: bool
 
-  QAbstractItemModel* = ref object of QObject ## \
+  QAbstractItemModel* = ref QAbstractItemModelObj
+  QAbstractItemModelObj* = object of QObject ## \
     ## A QAbstractItemModel
 
-  QAbstractListModel* = ref object of QAbstractItemModel ## \
+  QAbstractListModel* = ref QAbstractListModelObj
+  QAbstractListModelObj* = object of QAbstractItemModel ## \
     ## A QAbstractListModel
 
-  QAbstractTableModel* = ref object of QAbstractItemModel ## \
+  QAbstractTableModel* = ref QAbstractTableModelObj
+  QAbstractTableModelObj* = object of QAbstractItemModel ## \
     ## A QAbstractTableModel
 
-  QVariant* = ref object of RootObj ## \
+  QVariant* = ref QVariantObj
+  QVariantObj* = object of RootObj ## \
     ## A QVariant
     vptr: DosQVariant
 
-  QQmlApplicationEngine* = ref object of RootObj ## \
+  QQmlApplicationEngine* = ref QQmlApplicationEngineObj
+  QQmlApplicationEngineObj* = object of RootObj ## \
     ## A QQmlApplicationEngine
     vptr: DosQQmlApplicationEngine
 
-  QCoreApplication* = ref object of RootObj ## \
+  QCoreApplication* = ref QCoreApplicationObj
+  QCoreApplicationObj* = object of RootObj ## \
     ## A QCoreApplication
     deleted: bool
 
-  QGuiApplication* = ref object of QCoreApplication ## \
+  QGuiApplication* = ref QGuiApplicationObj
+  QGuiApplicationObj* = object of QCoreApplication ## \
 
-  QApplication* = ref object of QGuiApplication ## \
+  QApplication* = ref QApplicationObj
+  QApplicationObj* = object of QGuiApplication ## \
 
-  QQuickView* = ref object of RootObj ## \
+  QQuickView* = ref QQuickViewObj
+  QQuickViewObj* = object of RootObj ## \
     # A QQuickView
     vptr: DosQQuickView
 
-  QHashIntByteArray* = ref object of RootObj ## \
+  QHashIntByteArray* = ref QHashIntByteArrayObj
+  QHashIntByteArrayObj* = object of RootObj ## \
     # A QHash<int, QByteArray>
     vptr: DosQHashIntByteArray
 
-  QModelIndex* = ref object of RootObj ## \
+  QModelIndex* = ref QModelIndexObj
+  QModelIndexObj* = object of RootObj ## \
     # A QModelIndex
     vptr: DosQModelIndex
 
-  QResource* = ref object of RootObj ## \
+  QResource* = ref QResourceObj
+  QResourceObj* = object of RootObj ## \
     # A QResource
 
   QtItemFlag*{.pure, size: sizeof(cint).} = enum ## \
@@ -108,13 +121,15 @@ type
     writeSlot*: string
     notifySignal*: string
 
-  QMetaObject* = ref object of RootObj
+  QMetaObject* = ref QMetaObjectObj
+  QMetaObjectObj* = object of RootObj
     vptr: DosQMetaObject
     signals: seq[SignalDefinition]
     slots: seq[SlotDefinition]
     properties: seq[PropertyDefinition]
 
-  QUrl* = ref object of RootObj
+  QUrl* = ref QUrlObj
+  QUrlObj* = object of RootObj
     vptr: DosQUrl
 
   QUrlParsingMode*{.pure, size: sizeof(cint).} = enum
@@ -126,7 +141,8 @@ type
     Take,                   # The ownership is passed to the wrapper
     Clone                   # The node should be cloned
 
-  QMetaObjectConnection = ref object
+  QMetaObjectConnection = ref QMetaObjectConnectionObj
+  QMetaObjectConnectionObj = object
     vptr: DosQMetaObjectConnection
 
   LambdaInvokerProc = proc(arguments: seq[QVariant]) {.closure.}
@@ -137,3 +153,53 @@ type
 
 const
   UserRole* = 0x100
+
+proc `=destroy`(self: var QObjectObj) =
+  if self.owner and not self.vptr.isNil:
+    dos_qobject_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QVariantObj) =
+  if not self.vptr.isNil:
+    dos_qvariant_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QGuiApplicationObj) =
+  if not self.deleted:
+    dos_qguiapplication_delete()
+    self.deleted = true
+
+proc `=destroy`(self: var QHashIntByteArrayObj) =
+  if not self.vptr.isNil:
+    dos_qhash_int_qbytearray_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QMetaObjectObj) =
+  if not self.vptr.isNil:
+    dos_qmetaobject_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QMetaObjectConnectionObj) =
+  if not self.vptr.isNil:
+    dos_qmetaobject_connection_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QModelIndexObj) =
+  if not self.vptr.isNil:
+    dos_qmodelindex_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QQmlApplicationEngineObj) =
+  if not self.vptr.isNil:
+    dos_qqmlapplicationengine_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QQuickViewObj) =
+  if not self.vptr.isNil:
+    dos_qquickview_delete(self.vptr)
+    self.vptr = nil
+
+proc `=destroy`(self: var QUrlObj) =
+  if not self.vptr.isNil:
+    dos_qurl_delete(self.vptr)
+    self.vptr = nil

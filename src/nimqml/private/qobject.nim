@@ -123,10 +123,8 @@ proc qobjectCallback(qobjectPtr: pointer, slotNamePtr: DosQVariant, dosArguments
   GC_ref(qobject)
   # Retrieve slot name
   let slotName = newQVariant(slotNamePtr, Ownership.Clone) # Don't take ownership but clone
-  defer: slotName.delete
   # Retrieve arguments
   let arguments = toQVariantSequence(dosArguments, dosArgumentsLength, Ownership.Clone) # Don't take ownership but clone
-  defer: arguments.delete
   # Forward to args to the slot
   qobject.onSlotCalled(slotName.stringVal, arguments)
   # Update the slot return value
@@ -136,7 +134,8 @@ proc qobjectCallback(qobjectPtr: pointer, slotNamePtr: DosQVariant, dosArguments
 proc setup*(self: QObject) =
   ## Initialize a new QObject
   self.owner = true
-  self.vptr = dos_qobject_create(addr(self[]), self.metaObject.vptr, qobjectCallback)
+  let c = qobjectCallback
+  self.vptr = dos_qobject_create(addr(self[]), self.metaObject.vptr, c)
 
 proc deleteLater*(self: QObject) =
   debugMsg("QObject", "deleteLater")
@@ -144,7 +143,7 @@ proc deleteLater*(self: QObject) =
   if not self.owner or self.vptr.isNil:
     return
   dos_qobject_deleteLater(self.vptr)
-  self.vptr.resetToNil
+  self.vptr = nil
 
 proc objectNameChanged*(self: QObject, objectName: string) {.signal.} = 
   ## Emit the object name changed signal
