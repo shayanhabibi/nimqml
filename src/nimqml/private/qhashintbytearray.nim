@@ -2,14 +2,6 @@ proc setup*(self: QHashIntByteArray) =
   ## Setup the QHash
   self.vptr = dos_qhash_int_qbytearray_create()
 
-proc delete*(self: QHashIntByteArray) =
-  ## Delete the QHash
-  if self.vptr.isNil:
-    return
-  debugMsg("QHashIntByteArray", "delete")
-  dos_qhash_int_qbytearray_delete(self.vptr)
-  self.vptr.resetToNil
-
 proc insert*(self: QHashIntByteArray, key: int, value: cstring) =
   ## Insert the value at the given key
   dos_qhash_int_qbytearray_insert(self.vptr, key, value)

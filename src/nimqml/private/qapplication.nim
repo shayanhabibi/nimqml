@@ -21,5 +21,5 @@ proc delete*(application: QApplication) =
 
 proc newQApplication*(): QApplication =
   ## Return a new QApplication
-  new(result, delete)
+  new(result)
   result.setup()

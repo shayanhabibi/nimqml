@@ -32,11 +32,6 @@ proc setup*(self: QAbstractListModel) =
   self.vptr = dos_qabstractlistmodel_create(addr(self[]), self.metaObject.vptr,
                                             qobjectCallback, qaimCallbacks).DosQObject
 
-proc delete*(self: QAbstractListModel) =
-  ## Delete the given QAbstractItemModel
-  debugMsg("QAbstractItemModel", "delete")
-  self.QObject.delete()
-
 method columnCount(self: QAbstractListModel, index: QModelIndex): int =
   return dos_qabstractlistmodel_columnCount(self.vptr.DosQAbstractListModel, index.vptr)
 

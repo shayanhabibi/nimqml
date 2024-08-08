@@ -109,7 +109,6 @@ type
   DosQMetaObjectInvokeMethodCallback = proc(data: pointer) {.cdecl.}
 
 # Conversion
-proc resetToNil[T](x: var T) = x = nil.pointer.T
 proc isNil(x: DosQMetaObject): bool = x.pointer.isNil
 proc isNil(x: DosQVariant): bool = x.pointer.isNil
 proc isNil(x: DosQObject): bool = x.pointer.isNil

@@ -5,15 +5,11 @@ QtObject:
   type Contact* = ref object of QObject
     name: string
 
-  proc delete*(self: Contact)
   proc setup(self: Contact)
   proc newContact(): Contact =
-    new(result, delete)
+    new(result)
     result.name = ""
     result.setup
-
-  proc delete*(self: Contact) =
-    self.QObject.delete
 
   proc setup(self: Contact) =
     self.QObject.setup
@@ -83,7 +79,6 @@ proc main() =
     let c1 = newContact()
     block:
       let c2 = newContact()
-      defer: c2.delete
       discard QObject.connect(c1, nameChanged, c2, setName)
       assert(c1.name != "John" and c2.name != "John")
       c1.setName("John")
